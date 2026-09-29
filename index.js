@@ -1,9 +1,8 @@
 main();
 
-
 function main() {
 
-    /*========== Create a WebGL Context ==========*/
+    // Create a WebGL Context
 
     const canvas = document.querySelector("#c");
     const gl = canvas.getContext("webgl");
@@ -14,11 +13,11 @@ function main() {
     }
 
 
-    /*========== Define and Store the Geometry ==========*/
+    // Define and Store the Geometry
 
-    const positions = [
+    const cubePositions = [
 
-        // FRONT FACE
+        // Front
         -0.70, -0.25, -0.5,
         -0.20, -0.25, -0.5,
         -0.20,  0.25, -0.5,
@@ -28,9 +27,7 @@ function main() {
         -0.70,  0.25, -0.5,
 
 
-        // BACK FACE
-        // shifted by (+0.15, +0.15)
-
+        // Back
         -0.55, -0.10,  0.5,
         -0.55,  0.40,  0.5,
         -0.05,  0.40,  0.5,
@@ -40,8 +37,7 @@ function main() {
         -0.05, -0.10,  0.5,
 
 
-        // BOTTOM FACE
-
+        // Bottom
         -0.70, -0.25, -0.5,
         -0.55, -0.10,  0.5,
         -0.05, -0.10,  0.5,
@@ -51,8 +47,7 @@ function main() {
         -0.20, -0.25, -0.5,
 
 
-        // RIGHT FACE
-
+        // Right
         -0.20, -0.25, -0.5,
         -0.05, -0.10,  0.5,
         -0.05,  0.40,  0.5,
@@ -62,8 +57,7 @@ function main() {
         -0.20,  0.25, -0.5,
 
 
-        // TOP FACE
-
+        // Top
         -0.70,  0.25, -0.5,
         -0.20,  0.25, -0.5,
         -0.05,  0.40,  0.5,
@@ -73,8 +67,7 @@ function main() {
         -0.55,  0.40,  0.5,
 
 
-        // LEFT FACE
-
+        // Left
         -0.70, -0.25, -0.5,
         -0.70,  0.25, -0.5,
         -0.55,  0.40,  0.5,
@@ -82,13 +75,67 @@ function main() {
         -0.70, -0.25, -0.5,
         -0.55,  0.40,  0.5,
         -0.55, -0.10,  0.5
-
     ];
 
 
-    const colors = [
+    const wedgePositions = [
 
-        // FRONT - gradient
+        // Front triangle
+         0.20, -0.25, -0.5,
+         0.65, -0.25, -0.5,
+         0.65,  0.25, -0.5,
+
+
+        // Back triangle
+         0.35, -0.10,  0.5,
+         0.80,  0.40,  0.5,
+         0.80, -0.10,  0.5,
+
+
+        // Bottom
+         0.20, -0.25, -0.5,
+         0.35, -0.10,  0.5,
+         0.80, -0.10,  0.5,
+
+         0.20, -0.25, -0.5,
+         0.80, -0.10,  0.5,
+         0.65, -0.25, -0.5,
+
+
+        // Right
+         0.65, -0.25, -0.5,
+         0.80, -0.10,  0.5,
+         0.80,  0.40,  0.5,
+
+         0.65, -0.25, -0.5,
+         0.80,  0.40,  0.5,
+         0.65,  0.25, -0.5,
+
+
+        // Slope
+         0.20, -0.25, -0.5,
+         0.65,  0.25, -0.5,
+         0.80,  0.40,  0.5,
+
+         0.20, -0.25, -0.5,
+         0.80,  0.40,  0.5,
+         0.35, -0.10,  0.5
+    ];
+
+
+    const positions = [
+        ...cubePositions,
+        ...wedgePositions
+    ];
+
+
+    const cubeVertexCount = cubePositions.length / 3;
+    const wedgeVertexCount = wedgePositions.length / 3;
+
+
+    const cubeColors = [
+
+        // Front
         1.0, 0.2, 0.2, 1.0,
         1.0, 0.7, 0.2, 1.0,
         0.9, 0.2, 0.7, 1.0,
@@ -98,7 +145,7 @@ function main() {
         0.8, 0.2, 0.3, 1.0,
 
 
-        // BACK - blue
+        // Back
         0.2, 0.3, 0.9, 1.0,
         0.2, 0.3, 0.9, 1.0,
         0.2, 0.3, 0.9, 1.0,
@@ -108,7 +155,7 @@ function main() {
         0.2, 0.3, 0.9, 1.0,
 
 
-        // BOTTOM - yellow
+        // Bottom
         0.9, 0.8, 0.2, 1.0,
         0.9, 0.8, 0.2, 1.0,
         0.9, 0.8, 0.2, 1.0,
@@ -118,7 +165,7 @@ function main() {
         0.9, 0.8, 0.2, 1.0,
 
 
-        // RIGHT - green
+        // Right
         0.2, 0.8, 0.3, 1.0,
         0.2, 0.8, 0.3, 1.0,
         0.2, 0.8, 0.3, 1.0,
@@ -128,7 +175,7 @@ function main() {
         0.2, 0.8, 0.3, 1.0,
 
 
-        // TOP - cyan
+        // Top
         0.2, 0.8, 0.9, 1.0,
         0.2, 0.8, 0.9, 1.0,
         0.2, 0.8, 0.9, 1.0,
@@ -138,7 +185,7 @@ function main() {
         0.2, 0.8, 0.9, 1.0,
 
 
-        // LEFT - purple
+        // Left
         0.6, 0.3, 0.8, 1.0,
         0.6, 0.3, 0.8, 1.0,
         0.6, 0.3, 0.8, 1.0,
@@ -146,14 +193,62 @@ function main() {
         0.6, 0.3, 0.8, 1.0,
         0.6, 0.3, 0.8, 1.0,
         0.6, 0.3, 0.8, 1.0
-
     ];
 
 
-    const cubeVertexCount = positions.length / 3;
+    const wedgeColors = [
+
+        // Front
+        0.8, 0.3, 0.3, 1.0,
+        0.8, 0.3, 0.3, 1.0,
+        0.8, 0.3, 0.3, 1.0,
+
+
+        // Back
+        0.3, 0.4, 0.9, 1.0,
+        0.3, 0.4, 0.9, 1.0,
+        0.3, 0.4, 0.9, 1.0,
+
+
+        // Bottom
+        0.9, 0.7, 0.2, 1.0,
+        0.9, 0.7, 0.2, 1.0,
+        0.9, 0.7, 0.2, 1.0,
+
+        0.9, 0.7, 0.2, 1.0,
+        0.9, 0.7, 0.2, 1.0,
+        0.9, 0.7, 0.2, 1.0,
+
+
+        // Right
+        0.2, 0.8, 0.4, 1.0,
+        0.2, 0.8, 0.4, 1.0,
+        0.2, 0.8, 0.4, 1.0,
+
+        0.2, 0.8, 0.4, 1.0,
+        0.2, 0.8, 0.4, 1.0,
+        0.2, 0.8, 0.4, 1.0,
+
+
+        // Slope gradient
+        1.0, 0.2, 0.2, 1.0,
+        0.2, 0.8, 0.9, 1.0,
+        1.0, 0.7, 0.2, 1.0,
+
+        1.0, 0.2, 0.2, 1.0,
+        1.0, 0.7, 0.2, 1.0,
+        0.7, 0.3, 0.8, 1.0
+    ];
+
+
+    const colors = [
+        ...cubeColors,
+        ...wedgeColors
+    ];
+
 
     console.assert(
-        colors.length === cubeVertexCount * 4,
+        colors.length === (positions.length / 3) * 4,
         "Colour array must contain 4 values per vertex"
     );
 
@@ -161,36 +256,28 @@ function main() {
     const buffers = initBuffers(gl, positions, colors);
 
 
-    /*========== Shaders ==========*/
+    // Shaders
 
     const vsSource = `
-
         attribute vec3 aPosition;
         attribute vec4 aVertexColor;
 
         varying lowp vec4 vColor;
 
         void main() {
-
             gl_Position = vec4(aPosition, 1.0);
-
             vColor = aVertexColor;
-
             gl_PointSize = 6.0;
         }
-
     `;
 
 
     const fsSource = `
-
         varying lowp vec4 vColor;
 
         void main() {
-
             gl_FragColor = vColor;
         }
-
     `;
 
 
@@ -227,18 +314,12 @@ function main() {
     gl.useProgram(program);
 
 
-    /*====== Connect the attributes with the vertex shader ======*/
-
     const positionLocation = gl.getAttribLocation(
         program,
         "aPosition"
     );
 
-    gl.bindBuffer(
-        gl.ARRAY_BUFFER,
-        buffers.position
-    );
-
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
     gl.enableVertexAttribArray(positionLocation);
 
     gl.vertexAttribPointer(
@@ -256,11 +337,7 @@ function main() {
         "aVertexColor"
     );
 
-    gl.bindBuffer(
-        gl.ARRAY_BUFFER,
-        buffers.color
-    );
-
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
     gl.enableVertexAttribArray(colorLocation);
 
     gl.vertexAttribPointer(
@@ -273,7 +350,7 @@ function main() {
     );
 
 
-    /*========== Drawing ==========*/
+    // Drawing
 
     function render() {
 
@@ -284,19 +361,10 @@ function main() {
             canvas.height
         );
 
-
-        gl.clearColor(
-            0.05,
-            0.05,
-            0.05,
-            1.0
-        );
-
+        gl.clearColor(0.05, 0.05, 0.05, 1.0);
 
         gl.enable(gl.DEPTH_TEST);
-
         gl.depthFunc(gl.LEQUAL);
-
 
         gl.clear(
             gl.COLOR_BUFFER_BIT |
@@ -311,8 +379,15 @@ function main() {
         );
 
 
+        gl.drawArrays(
+            gl.TRIANGLES,
+            cubeVertexCount,
+            wedgeVertexCount
+        );
+
+
         document.querySelector("#status").textContent =
-            "Student ID: 241482 | TRIANGLES | Depth: ON | Cube";
+            "Student ID: 241482 | TRIANGLES | Depth: ON | Cube first";
     }
 
 
@@ -320,84 +395,51 @@ function main() {
 }
 
 
-
 function createShader(gl, type, source) {
 
     const shader = gl.createShader(type);
 
-    gl.shaderSource(
-        shader,
-        source
-    );
-
+    gl.shaderSource(shader, source);
     gl.compileShader(shader);
 
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
 
-    if (!gl.getShaderParameter(
-        shader,
-        gl.COMPILE_STATUS
-    )) {
-
-        console.log(
-            gl.getShaderInfoLog(shader)
-        );
+        console.log(gl.getShaderInfoLog(shader));
 
         gl.deleteShader(shader);
 
         return null;
     }
 
-
     return shader;
 }
-
 
 
 function createProgram(gl, vertexShader, fragmentShader) {
 
     const program = gl.createProgram();
 
-
-    gl.attachShader(
-        program,
-        vertexShader
-    );
-
-    gl.attachShader(
-        program,
-        fragmentShader
-    );
-
+    gl.attachShader(program, vertexShader);
+    gl.attachShader(program, fragmentShader);
 
     gl.linkProgram(program);
 
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
 
-    if (!gl.getProgramParameter(
-        program,
-        gl.LINK_STATUS
-    )) {
-
-        console.log(
-            gl.getProgramInfoLog(program)
-        );
+        console.log(gl.getProgramInfoLog(program));
 
         return null;
     }
 
-
     return program;
 }
-
 
 
 function initBuffers(gl, positions, colors) {
 
     const positionBuffer = gl.createBuffer();
 
-    gl.bindBuffer(
-        gl.ARRAY_BUFFER,
-        positionBuffer
-    );
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
     gl.bufferData(
         gl.ARRAY_BUFFER,
@@ -408,10 +450,7 @@ function initBuffers(gl, positions, colors) {
 
     const colorBuffer = gl.createBuffer();
 
-    gl.bindBuffer(
-        gl.ARRAY_BUFFER,
-        colorBuffer
-    );
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 
     gl.bufferData(
         gl.ARRAY_BUFFER,
