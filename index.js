@@ -80,48 +80,47 @@ function main() {
 
     const wedgePositions = [
 
-        // Front triangle
-         0.20, -0.25, -0.5,
-         0.65, -0.25, -0.5,
-         0.65,  0.25, -0.5,
+    // Left triangle
+    0.20, -0.25, -0.5,
+    0.35, -0.10,  0.5,
+    0.35,  0.40,  0.5,
 
 
-        // Back triangle
-         0.35, -0.10,  0.5,
-         0.80,  0.40,  0.5,
-         0.80, -0.10,  0.5,
+    // Right triangle
+    0.65, -0.25, -0.5,
+    0.80,  0.40,  0.5,
+    0.80, -0.10,  0.5,
 
 
-        // Bottom
-         0.20, -0.25, -0.5,
-         0.35, -0.10,  0.5,
-         0.80, -0.10,  0.5,
+    // Bottom
+    0.20, -0.25, -0.5,
+    0.35, -0.10,  0.5,
+    0.80, -0.10,  0.5,
 
-         0.20, -0.25, -0.5,
-         0.80, -0.10,  0.5,
-         0.65, -0.25, -0.5,
-
-
-        // Right
-         0.65, -0.25, -0.5,
-         0.80, -0.10,  0.5,
-         0.80,  0.40,  0.5,
-
-         0.65, -0.25, -0.5,
-         0.80,  0.40,  0.5,
-         0.65,  0.25, -0.5,
+    0.20, -0.25, -0.5,
+    0.80, -0.10,  0.5,
+    0.65, -0.25, -0.5,
 
 
-        // Slope
-         0.20, -0.25, -0.5,
-         0.65,  0.25, -0.5,
-         0.80,  0.40,  0.5,
+    // Back
+    0.35, -0.10,  0.5,
+    0.80, -0.10,  0.5,
+    0.80,  0.40,  0.5,
 
-         0.20, -0.25, -0.5,
-         0.80,  0.40,  0.5,
-         0.35, -0.10,  0.5
-    ];
+    0.35, -0.10,  0.5,
+    0.80,  0.40,  0.5,
+    0.35,  0.40,  0.5,
 
+
+    // Slope
+    0.20, -0.25, -0.5,
+    0.65, -0.25, -0.5,
+    0.80,  0.40,  0.5,
+
+    0.20, -0.25, -0.5,
+    0.80,  0.40,  0.5,
+    0.35,  0.40,  0.5
+];
 
     const positions = [
         ...cubePositions,
@@ -131,6 +130,10 @@ function main() {
 
     const cubeVertexCount = cubePositions.length / 3;
     const wedgeVertexCount = wedgePositions.length / 3;
+   let drawMode = gl.TRIANGLES;
+let modeName = "TRIANGLES";
+let depthEnabled = true;
+let cubeFirst = true;
 
 
     const cubeColors = [
@@ -352,46 +355,119 @@ function main() {
 
     // Drawing
 
-    function render() {
+function render() {
 
-        gl.viewport(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
+    gl.viewport(0, 0, canvas.width, canvas.height);
 
-        gl.clearColor(0.05, 0.05, 0.05, 1.0);
+    gl.clearColor(0.05, 0.05, 0.05, 1.0);
 
+    if (depthEnabled) {
         gl.enable(gl.DEPTH_TEST);
-        gl.depthFunc(gl.LEQUAL);
+    } else {
+        gl.disable(gl.DEPTH_TEST);
+    }
 
-        gl.clear(
-            gl.COLOR_BUFFER_BIT |
-            gl.DEPTH_BUFFER_BIT
-        );
+    gl.depthFunc(gl.LEQUAL);
 
+    gl.clear(
+        gl.COLOR_BUFFER_BIT |
+        gl.DEPTH_BUFFER_BIT
+    );
+
+    if (cubeFirst) {
 
         gl.drawArrays(
-            gl.TRIANGLES,
+            drawMode,
             0,
             cubeVertexCount
         );
 
-
         gl.drawArrays(
-            gl.TRIANGLES,
+            drawMode,
             cubeVertexCount,
             wedgeVertexCount
         );
 
+    } else {
 
-        document.querySelector("#status").textContent =
-            "Student ID: 241482 | TRIANGLES | Depth: ON | Cube first";
+        gl.drawArrays(
+            drawMode,
+            cubeVertexCount,
+            wedgeVertexCount
+        );
+
+        gl.drawArrays(
+            drawMode,
+            0,
+            cubeVertexCount
+        );
     }
 
+    const depthText = depthEnabled ? "ON" : "OFF";
+    const orderText = cubeFirst ? "Cube first" : "Wedge first";
+
+    document.querySelector("#status").textContent =
+        "Student ID: 241482 | " +
+        modeName +
+        " | Depth: " +
+        depthText +
+        " | " +
+        orderText;
+}
+
+
+document.addEventListener("keydown", function(event) {
+
+    const key = event.key.toLowerCase();
+
+    if (key === "1") {
+
+        drawMode = gl.TRIANGLES;
+        modeName = "TRIANGLES";
+
+    } else if (key === "2") {
+
+        drawMode = gl.LINE_LOOP;
+        modeName = "LINE_LOOP";
+
+    } else if (key === "3") {
+
+        drawMode = gl.LINES;
+        modeName = "LINES";
+
+    } else if (key === "4") {
+
+        drawMode = gl.LINE_STRIP;
+        modeName = "LINE_STRIP";
+
+    } else if (key === "5") {
+
+        drawMode = gl.POINTS;
+        modeName = "POINTS";
+
+    } else if (key === "6") {
+
+        drawMode = gl.TRIANGLE_STRIP;
+        modeName = "TRIANGLE_STRIP";
+
+    } else if (key === "d") {
+
+        depthEnabled = !depthEnabled;
+
+    } else if (key === "s") {
+
+        cubeFirst = !cubeFirst;
+
+    } else {
+
+        return;
+    }
 
     render();
+});
+
+
+render();
 }
 
 
